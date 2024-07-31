@@ -31,3 +31,13 @@ jobs:
           cache: maven
       - name: Build with Maven
         run: mvn -B package --file pom.xml
+      - name: Build
+        id: build
+        uses: cloudposse/github-action-docker-build-push@main
+        with:
+          registry: registry.hub.docker.com
+          organization: '${{ github.event.repository.owner.login }}'
+          repository: '${{ github.event.repository.name }}'
+          login: '${{ secrets.DOCKERHUB_USERNAME }}'
+          password: '${{ secrets.DOCKERHUB_PASSWORD }}'
+          platforms: linux/amd64,linux/arm64
