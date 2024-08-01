@@ -1,37 +1,32 @@
-name: CI/CD Pipeline
+name: Build and Push Docker Image
 
 on:
   push:
-    branches:
-      - ['master']
-  pull_request:
-    branches:
-      - ['master']
+    branches: ['master']
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - name: Set up JDK 17
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '17'
+          version: '17'
 
-      - name: Build with Gradle
+      - name: Build project
         run: ./gradlew build
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
+      - name: Build and push image
+        uses: docker/build-push-action@v3
         with:
+          context: .
+          push: true
+          tags: amine237/task-management-system-backend:${{ github.sha }}
+          dockerfile: Dockerfile
+          registry: https://index.docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Build and Push Docker Image
-        run: |
-          docker build -t amine237/task-management-system-backend:latest .
-          docker push amine237/task-management-system-backend:latest
