@@ -2,6 +2,7 @@ package com.medamine.taskmanagement.web.rest;
 
 import com.medamine.taskmanagement.domain.Task;
 import com.medamine.taskmanagement.service.TaskService;
+import com.medamine.taskmanagement.service.dto.TaskDTO;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,17 +26,17 @@ public class TaskController {
     }
 
     @PostMapping
-    public Task createTask(@RequestBody Task task) {
-        return taskService.save(task);
+    public Task createTask(@RequestBody TaskDTO taskDTO) {
+        return taskService.save(taskDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task task) {
+    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody TaskDTO taskDTO) {
         if (!taskService.findById(id).isPresent()) {
             return ResponseEntity.notFound().build();
         }
-        task.setId(id);
-        return ResponseEntity.ok(taskService.save(task));
+        taskDTO.setId(id);
+        return ResponseEntity.ok(taskService.save(taskDTO));
     }
 
     @DeleteMapping("/{id}")

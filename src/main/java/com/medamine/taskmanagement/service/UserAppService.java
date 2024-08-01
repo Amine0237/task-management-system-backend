@@ -7,6 +7,7 @@ import com.medamine.taskmanagement.repository.UserAppRepository;
 import com.medamine.taskmanagement.repository.UserRepository;
 import com.medamine.taskmanagement.security.AuthoritiesConstants;
 import com.medamine.taskmanagement.service.dto.UserAppDTO;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -67,6 +68,21 @@ public class UserAppService {
     }
 
     public void deleteById(Long id) {
-        userAppRepository.deleteById(id);
+        Optional<UserApp> userAppOptional = userAppRepository.findById(id);
+
+        if (userAppOptional.isPresent()) {
+            UserApp userApp = userAppOptional.get();
+
+            Optional<User> userOptional = userRepository.findOneByLogin(userApp.getUsername());
+
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                userRepository.delete(user);
+            }
+
+            userAppRepository.deleteById(id);
+        } else {
+            throw new EntityNotFoundException("UserApp not found with id " + id);
+        }
     }
 }

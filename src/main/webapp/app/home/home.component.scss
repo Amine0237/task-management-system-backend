@@ -21,3 +21,38 @@ Main page styles
     background-size: contain;
   }
 }
+
+.container {
+  background-color: #212529; //text color: 9b9d9e
+  width: 40vw;
+  height: 40vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .container-son{
+    display: flex;
+    flex-direction: column;
+
+
+    span {
+      color: #9b9d9e;
+      font-size: 25px;
+      font-weight: 900;
+    }
+
+    .container-buttons {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin-top: 50px;
+
+      button {
+        color: #212529;
+        background-color:#9b9d9e;
+        border-color: #cbcccd;
+      }
+    }
+  }
+
+}
